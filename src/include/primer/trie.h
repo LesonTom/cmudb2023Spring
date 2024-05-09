@@ -124,6 +124,9 @@ class Trie {
   // Remove the key from the trie. If the key does not exist, return the original trie.
   // Otherwise, returns the new trie.
   auto Remove(std::string_view key) const -> Trie;
+
+  auto Dfs(const std::shared_ptr<const TrieNode> &root, std::string_view key, size_t index) const
+      -> std::shared_ptr<const TrieNode>;
 };
 
 }  // namespace bustub
