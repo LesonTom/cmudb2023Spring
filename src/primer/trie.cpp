@@ -23,12 +23,14 @@ auto Trie::Get(std::string_view key) const -> const T * {
     cur = temp;
   }
 
-  if (cur->is_value_node_ == false) {
+  if (!cur->is_value_node_) {
     return nullptr;
   }
 
   auto temp_value = dynamic_cast<const TrieNodeWithValue<T> *>(cur.get());
-  if (temp_value == nullptr) return nullptr;
+  if (!temp_value) {
+    return nullptr;
+  }
 
   return temp_value->value_.get();
 }
@@ -61,9 +63,9 @@ auto Trie::Put(std::string_view key, T value) const -> Trie {
   for (; i < key.size() - 1; i++) {
     if (ptr->children_.count(key[i]) == 0) {
       // branch is null, create new branch
-      std::shared_ptr<TrieNode> newNode = std::make_shared<TrieNode>();
-      ptr->children_[key[i]] = newNode;
-      ptr = newNode;
+      std::shared_ptr<TrieNode> new_node = std::make_shared<TrieNode>();
+      ptr->children_[key[i]] = new_node;
+      ptr = new_node;
     } else {
       // branch is existing, access it
       std::shared_ptr<TrieNode> child = ptr->children_[key[i]].get()->Clone();
@@ -73,15 +75,15 @@ auto Trie::Put(std::string_view key, T value) const -> Trie {
   }
 
   // handle the latest character
-  std::shared_ptr<TrieNodeWithValue<T>> valueNode;
+  std::shared_ptr<TrieNodeWithValue<T>> value_node;
   if (ptr->children_.count(key.back()) == 0) {
     // not exist
-    valueNode = std::make_shared<TrieNodeWithValue<T>>(std::make_shared<T>(std::move(value)));
+    value_node = std::make_shared<TrieNodeWithValue<T>>(std::make_shared<T>(std::move(value)));
   } else {
-    valueNode = std::make_shared<TrieNodeWithValue<T>>(ptr->children_[key.back()]->children_,
-                                                       std::make_shared<T>(std::move(value)));
+    value_node = std::make_shared<TrieNodeWithValue<T>>(ptr->children_[key.back()]->children_,
+                                                        std::make_shared<T>(std::move(value)));
   }
-  ptr->children_[key.back()] = valueNode;
+  ptr->children_[key.back()] = value_node;
   return Trie(root);
 }
 
