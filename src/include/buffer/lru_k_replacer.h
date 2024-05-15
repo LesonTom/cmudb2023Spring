@@ -160,10 +160,11 @@ class LRUKReplacer {
   std::vector<bool> is_accessible_;
   std::unordered_map<int, size_t> use_count_;
 
-  std::list<frame_id_t> history_list_; //FIFO
+  std::list<frame_id_t> history_list_;  // FIFO
   std::unordered_map<frame_id_t, std::list<int>::iterator> history_map_;
 
-  std::list<frame_id_t> cache_list_; // if the number of accesses to frame_id reaches k_ times, then put it in cache_list_.
+  std::list<frame_id_t>
+      cache_list_;  // if the number of accesses to frame_id reaches k_ times, then put it in cache_list_.
   std::unordered_map<frame_id_t, std::list<int>::iterator> cache_map_;
 };
 
