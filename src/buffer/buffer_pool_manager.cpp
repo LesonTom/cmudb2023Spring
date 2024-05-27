@@ -126,7 +126,7 @@ auto BufferPoolManager::UnpinPage(page_id_t page_id, bool is_dirty, [[maybe_unus
   if (page_id == INVALID_PAGE_ID) {
     return false;
   }
-  if (page_table_.find(page_id) != page_table_.end()) {
+  if (page_table_.find(page_id) == page_table_.end()) {
     return false;
   }
 
@@ -135,7 +135,7 @@ auto BufferPoolManager::UnpinPage(page_id_t page_id, bool is_dirty, [[maybe_unus
   if (pages_[frame_id].pin_count_ > 0) {
     pages_[frame_id].pin_count_--;
     if (pages_[frame_id].pin_count_ == 0) {
-      replacer_->SetEvictable(frame_id, false);
+      replacer_->SetEvictable(frame_id, true);
     }
     return true;
   }
