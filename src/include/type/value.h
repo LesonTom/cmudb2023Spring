@@ -170,7 +170,7 @@ class Value {
 }  // namespace bustub
 
 template <typename T>
-struct fmt::formatter<T, std::enable_if_t<std::is_base_of<bustub::Value, T>::value, char>>
+struct fmt::formatter<T, std::enable_if_t<std::is_base_of_v<bustub::Value, T>, char>>
     : fmt::formatter<std::string> {
   template <typename FormatCtx>
   auto format(const bustub::Value &x, FormatCtx &ctx) const {
@@ -179,7 +179,7 @@ struct fmt::formatter<T, std::enable_if_t<std::is_base_of<bustub::Value, T>::val
 };
 
 template <typename T>
-struct fmt::formatter<std::unique_ptr<T>, std::enable_if_t<std::is_base_of<bustub::Value, T>::value, char>>
+struct fmt::formatter<std::unique_ptr<T>, std::enable_if_t<std::is_base_of_v<bustub::Value, T>, char>>
     : fmt::formatter<std::string> {
   template <typename FormatCtx>
   auto format(const std::unique_ptr<bustub::Value> &x, FormatCtx &ctx) const {
